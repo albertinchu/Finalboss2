@@ -5,9 +5,9 @@ namespace Finalbossdogs
 {
 	[PluginDetails(
 		author = "Albertinchu",
-		name = "Finalboss096",
+		name = "Finalbossdogs",
 		description = "2 perros con 3000 de vida",
-		id = "albertinchu.gamemode.Finalboss096",
+		id = "albertinchu.gamemode.Finalbossdogs",
 		version = "1.0.0",
 		SmodMajor = 3,
 		SmodMinor = 0,
