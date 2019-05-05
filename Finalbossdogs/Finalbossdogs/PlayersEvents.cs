@@ -9,7 +9,7 @@ using scp4aiur;
 namespace Finalbossdogs
 {
 	partial class PlayersEvents : IEventHandlerSetRole, IEventHandlerWaitingForPlayers, IEventHandlerSetConfig, IEventHandlerSetSCPConfig, IEventHandlerPlayerHurt,
-	IEventHandlerRoundEnd, IEventHandlerRoundStart
+	IEventHandlerRoundEnd, IEventHandlerRoundStart, IEventHandlerShoot
 	{
 		private Finalbossdogs plugin;
 		public PlayersEvents(Finalbossdogs plugin)
@@ -36,7 +36,7 @@ namespace Finalbossdogs
 		{
 			yield return 2f;
 			PluginManager.Manager.Server.Map.AnnounceCustomMessage("Alert . Containment breach Detected . Automatic Self Destruction in 3 . 2 . 1");
-			yield return 7f;           
+			yield return 14f;           
 			PluginManager.Manager.Server.Map.DetonateWarhead();
 			yield return 1f;
 			PluginManager.Manager.Server.Map.DetonateWarhead();
@@ -72,7 +72,7 @@ namespace Finalbossdogs
 		public void OnSetRole(PlayerSetRoleEvent ev)
 		{
 
-			if((ev.Player.TeamRole.Role == Role.CHAOS_INSURGENCY)||(ev.Player.TeamRole.Role == Role.FACILITY_GUARD))
+			if((ev.Player.TeamRole.Role == Role.FACILITY_GUARD))
 			{
 				ev.Player.ChangeRole(Role.CLASSD);
 				Timing.Run(Teleport1(ev.Player));
@@ -112,7 +112,7 @@ namespace Finalbossdogs
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)
 		{
-		   if((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89))
+		   if((Jugadores.ContainsKey(ev.Player.SteamId))&&((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89)))
 			{
 				Jugadores[ev.Player.SteamId] = (Jugadores[ev.Player.SteamId] + ev.Damage);
 		   }
@@ -139,14 +139,17 @@ namespace Finalbossdogs
 		public void OnRoundStart(RoundStartEvent ev)
 		{
 			Timing.Run(Bomb());
-		   foreach(Player player in PluginManager.Manager.Server.GetPlayers())
-		   {
-				if(player.TeamRole.Role != Role.SCP_096)
-				{
-					Jugadores.Add(player.SteamId, 0);
-				}
-				
-		   }
+		 
+		}
+
+		public void OnShoot(PlayerShootEvent ev)
+		{
+			
+			if((ev.Player.TeamRole.Team != Team.SCP)&&(!Jugadores.ContainsKey(ev.Player.SteamId)))
+			{
+				Jugadores.Add(ev.Player.SteamId, 0);
+			}
+
 		}
 	}
 }
