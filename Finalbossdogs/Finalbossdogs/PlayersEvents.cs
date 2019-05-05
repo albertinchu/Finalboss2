@@ -112,9 +112,9 @@ namespace Finalbossdogs
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)
 		{
-		   if((Jugadores.ContainsKey(ev.Player.SteamId))&&((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89)))
+		   if((Jugadores.ContainsKey(ev.Attacker.SteamId))&&((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89)))
 			{
-				Jugadores[ev.Player.SteamId] = (Jugadores[ev.Player.SteamId] + ev.Damage);
+				Jugadores[ev.Attacker.SteamId] = (Jugadores[ev.Attacker.SteamId] + ev.Damage);
 		   }
 		}
 
