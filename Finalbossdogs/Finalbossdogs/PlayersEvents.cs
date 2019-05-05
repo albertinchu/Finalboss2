@@ -9,7 +9,7 @@ using scp4aiur;
 namespace Finalbossdogs
 {
 	partial class PlayersEvents : IEventHandlerSetRole, IEventHandlerWaitingForPlayers, IEventHandlerSetConfig, IEventHandlerSetSCPConfig, IEventHandlerPlayerHurt,
-	IEventHandlerRoundEnd, IEventHandlerRoundStart, IEventHandlerShoot
+	IEventHandlerRoundEnd, IEventHandlerRoundStart
 	{
 		private Finalbossdogs plugin;
 		public PlayersEvents(Finalbossdogs plugin)
@@ -112,10 +112,14 @@ namespace Finalbossdogs
 
 		public void OnPlayerHurt(PlayerHurtEvent ev)
 		{
-		   if((Jugadores.ContainsKey(ev.Attacker.SteamId))&&((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89)))
+			if ((ev.Player.TeamRole.Team == Team.SCP) && (!Jugadores.ContainsKey(ev.Attacker.SteamId)))
 			{
+				Jugadores.Add(ev.Attacker.SteamId, 0);
+			}
+			if ((Jugadores.ContainsKey(ev.Attacker.SteamId))&&((ev.Player.TeamRole.Role == Role.SCP_939_89)|| (ev.Player.TeamRole.Role == Role.SCP_939_89)))
+		    {
 				Jugadores[ev.Attacker.SteamId] = (Jugadores[ev.Attacker.SteamId] + ev.Damage);
-		   }
+		    }
 		}
 
 		public void OnRoundEnd(RoundEndEvent ev)
@@ -142,14 +146,10 @@ namespace Finalbossdogs
 		 
 		}
 
-		public void OnShoot(PlayerShootEvent ev)
-		{
+		
 			
-			if((ev.Player.TeamRole.Team != Team.SCP)&&(!Jugadores.ContainsKey(ev.Player.SteamId)))
-			{
-				Jugadores.Add(ev.Player.SteamId, 0);
-			}
+			
 
-		}
+		
 	}
 }
